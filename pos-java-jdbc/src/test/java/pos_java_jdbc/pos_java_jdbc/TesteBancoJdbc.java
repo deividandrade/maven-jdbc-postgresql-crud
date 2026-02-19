@@ -9,53 +9,69 @@ import model.Userposjava;
 
 public class TesteBancoJdbc {
 
-    @Test
-    public void initBanco() {
+	@Test
+	public void initBanco() {
 
-        UserPosDAO userPosDAO = new UserPosDAO();
-        Userposjava userposjava = new Userposjava();
+		UserPosDAO userPosDAO = new UserPosDAO();
+		Userposjava userposjava = new Userposjava();
 
-        userposjava.setNome("paulo");
-        userposjava.setEmail("paulo@gmail.com");
+		userposjava.setNome("paulo");
+		userposjava.setEmail("paulo@gmail.com");
 
-        userPosDAO.salvar(userposjava);
-    }
+		userPosDAO.salvar(userposjava);
+	}
 
-    @Test
-    public void initListar() {
+	@Test
+	public void initListar() {
 
-        UserPosDAO dao = new UserPosDAO();
+		UserPosDAO dao = new UserPosDAO();
 
-        try {
+		try {
 
-            List<Userposjava> list = dao.listar();
+			List<Userposjava> list = dao.listar();
 
-            for (Userposjava userposjava : list) {
-                System.out.println(userposjava);
-                System.out.println("------------------------------");
-            }
+			for (Userposjava userposjava : list) {
+				System.out.println(userposjava);
+				System.out.println("------------------------------");
+			}
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    @Test
-    public void initBuscar() {
-    	
-    	UserPosDAO dao = new UserPosDAO();
-    	
-    	try {
-			Userposjava userposjava = dao.buscar(6L);
-			
-			System.out.println(userposjava);
-			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-    }
-    
-}
+	}
 
+	@Test
+	public void initBuscar() {
+
+		UserPosDAO dao = new UserPosDAO();
+
+		try {
+			Userposjava userposjava = dao.buscar(6L);
+
+			System.out.println(userposjava);
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+	}
+
+	@Test
+	public void initAtualizar() {
+		try {
+			UserPosDAO dao = new UserPosDAO();
+
+			Userposjava objetoBanco = dao.buscar(5L);
+
+			objetoBanco.setNome("Nome alterado no metodo atualizar");
+
+			dao.atualizar(objetoBanco);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}

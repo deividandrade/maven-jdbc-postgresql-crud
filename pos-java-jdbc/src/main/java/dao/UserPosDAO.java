@@ -7,29 +7,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import conexaojdbc.SingleConnection;
 import model.Userposjava;
 
 public class UserPosDAO {
 
 	private Connection connection;
-	
+
 	public UserPosDAO() {
 		connection = SingleConnection.getConnection();
-		
+
 	}
-	
-	public void salvar (Userposjava userposjava) {
+
+	public void salvar(Userposjava userposjava) {
 		try {
-		String sql = "insert into userposjava(id, nome, email) values (?,?,?)";
-		PreparedStatement insert = connection.prepareStatement(sql);
-		insert.setLong(1, userposjava.getId());
-		insert.setString(2, userposjava.getNome());
-		insert.setString(3, userposjava.getEmail());
-		insert.execute();
-		connection.commit(); // Salva no banco
-		
+			String sql = "insert into userposjava(id, nome, email) values (?,?,?)";
+			PreparedStatement insert = connection.prepareStatement(sql);
+			insert.setLong(1, userposjava.getId());
+			insert.setString(2, userposjava.getNome());
+			insert.setString(3, userposjava.getEmail());
+			insert.execute();
+			connection.commit(); // Salva no banco
+
 		} catch (Exception e) {
 			try {
 				connection.rollback(); // Reverte operação
@@ -39,48 +38,67 @@ public class UserPosDAO {
 			e.printStackTrace();
 		}
 	}
-	
-	public List<Userposjava> listar () throws Exception {
 
-	    List<Userposjava> list = new ArrayList<>();
+	public List<Userposjava> listar() throws Exception {
 
-	    String sql = "select * from userposjava";
+		List<Userposjava> list = new ArrayList<>();
 
-	    PreparedStatement statement = connection.prepareStatement(sql);
-	    ResultSet resultado = statement.executeQuery();
+		String sql = "select * from userposjava";
 
-	    while (resultado.next()) {
+		PreparedStatement statement = connection.prepareStatement(sql);
+		ResultSet resultado = statement.executeQuery();
 
-	        Userposjava userposjava = new Userposjava();
-	        userposjava.setId(resultado.getLong("id"));
-	        userposjava.setNome(resultado.getString("nome"));
-	        userposjava.setEmail(resultado.getString("email"));
+		while (resultado.next()) {
 
-	        list.add(userposjava);
-	    }
+			Userposjava userposjava = new Userposjava();
+			userposjava.setId(resultado.getLong("id"));
+			userposjava.setNome(resultado.getString("nome"));
+			userposjava.setEmail(resultado.getString("email"));
 
-	    return list;
-	}
-	
-	public Userposjava buscar (Long id) throws Exception {
+			list.add(userposjava);
+		}
 
-	    Userposjava retorno = new Userposjava();
-
-	    String sql = "select * from userposjava where id = " + id;
-
-	    PreparedStatement statement = connection.prepareStatement(sql);
-	    ResultSet resultado = statement.executeQuery();
-
-	    while (resultado.next()) { // retorna apenas um ou nenhum
-
-	        retorno.setId(resultado.getLong("id"));
-	        retorno.setNome(resultado.getString("nome"));
-	        retorno.setEmail(resultado.getString("email"));
-
-	    }
-
-	    return retorno;
+		return list;
 	}
 
-	
+	public Userposjava buscar(Long id) throws Exception {
+
+		Userposjava retorno = new Userposjava();
+
+		String sql = "select * from userposjava where id = " + id;
+
+		PreparedStatement statement = connection.prepareStatement(sql);
+		ResultSet resultado = statement.executeQuery();
+
+		while (resultado.next()) { // retorna apenas um ou nenhum
+
+			retorno.setId(resultado.getLong("id"));
+			retorno.setNome(resultado.getString("nome"));
+			retorno.setEmail(resultado.getString("email"));
+
+		}
+
+		return retorno;
+	}
+
+	public void atualizar(Userposjava userposjava) {
+		try {
+
+			String slq = "update userposjava set nome = ? where id = " + userposjava.getId();
+
+			PreparedStatement statement = connection.prepareStatement(slq);
+			statement.setString(1, userposjava.getNome());
+
+			statement.execute();
+			connection.commit();
+		} catch (Exception e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		}
+	}
+
 }
